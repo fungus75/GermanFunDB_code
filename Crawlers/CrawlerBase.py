@@ -4,5 +4,4 @@ class CrawlerBase:
     This File is part of GermanFunDB, a German Fun Database for ML Projects
 
     GermanFunDB requres beautifulsoap4 for operations
-
     """
