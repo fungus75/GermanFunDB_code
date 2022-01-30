@@ -38,7 +38,12 @@ class CrawlerBase:
         # initialize some other attributes
         self.soupcontent = None
         self.webworkfolder = None
+        self.jokeworkfolder = None
         self.currenturl = None
+        self.oldprocessedlinks = None
+
+        # check if we have to serch for author
+        self.fetch_author = self.param.get("type", None) == "citate"
 
     def start(self, url=None):
         """start crawling incl. preparation
@@ -48,8 +53,6 @@ class CrawlerBase:
         # if url was missing, start with url from self.param
         if url is None:
             url = self.param.get("url", None)
-
-        self.currenturl = url
 
         # prepare workfolder for current task
         path = Path(self.param.get("workdir"))
@@ -72,15 +75,24 @@ class CrawlerBase:
         # start crawling
         self.crawl(url)
 
-    def crawl(self,url):
+    def crawl(self, url):
         """do the crawl, necessary preparations-steps have to be done before
 
         :param url: the web-url where to crawl from
         """
 
+        self.currenturl = url
+
         # stop if no content could be loaded
         if self.get_pagecontent(url) is None:
             return None
+
+        # prepare workdir
+        workdir = self.webworkfolder + "/jokes"
+        if not os.path.exists(workdir):
+            os.mkdir(workdir)
+        self.jokeworkfolder = workdir
+
 
         # find and extract jokes
         self.load_and_save_jokes()

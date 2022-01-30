@@ -1,10 +1,11 @@
 from Crawlers.CrawlerBase import CrawlerBase
-from Crawlers.HelperForCrawler import save_joke_and_update_index, get_full_url, get_author_from_end
+from Crawlers.HelperForCrawler import save_joke_and_update_index, get_full_url, get_author_from_end, \
+    remove_unnecessary_spaces
 from Data.Joke import Joke
 
 
-class CrawlerSmsat(CrawlerBase):
-    """Crawler for SMS.AT
+class CrawlerWitzenet(CrawlerBase):
+    """Crawler for witze.net
 
     """
 
@@ -17,16 +18,11 @@ class CrawlerSmsat(CrawlerBase):
         if self.soupcontent is None:
             raise Exception("self.soupcontent is empty")
 
-        # find all navigation table
-        navtable = self.soupcontent.find("table", {"class": "page_navigation"})
-        if navtable is None:
-            return None
-
         # find all links
-        links = navtable.find_all("a")
+        links = self.soupcontent.find_all("a", {"class": "x-xButton"})
         next_url = None
         for link in links:
-            if link.text.strip() == "Weiter":
+            if link.text.strip()[:7] == "Nächste":
                 next_url = link.get('href')
         return get_full_url(next_url, self.currenturl)
 
@@ -37,17 +33,16 @@ class CrawlerSmsat(CrawlerBase):
         if self.soupcontent is None:
             raise Exception("self.soupcontent is empty")
 
-        # find all relevant divs
-        jokedivs = self.soupcontent.find_all("div", {"class": "sms_item_text"})
+        # find div where jokes are stored
+        divs = self.soupcontent.find_all("div", {"class": "joke"})
 
-        # get text of each joke and crate new joke
-        for onediv in jokedivs:
-            text = onediv.text.strip()
+        for div in divs:
+            text = div.text
             author = None
 
             # if we have to fetch author, find within last brackets
             if self.fetch_author:
-                textauthor = get_author_from_end(text, '(', ')')
+                textauthor = get_author_from_end(text, '~')
                 text = textauthor["text"]
                 author = textauthor["author"]
 

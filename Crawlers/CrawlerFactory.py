@@ -1,4 +1,7 @@
+from Crawlers.CrawlerDeutschlernen import CrawlerDeutschlernen
+from Crawlers.CrawlerJustli import CrawlerJustli
 from Crawlers.CrawlerSmsat import CrawlerSmsat
+from Crawlers.CrawlerWitzenet import CrawlerWitzenet
 
 
 class CrawlerFactory:
@@ -21,6 +24,9 @@ class CrawlerFactory:
         # list of possible crawlers and their classes
         possible_crawlers = {
             "smsat": CrawlerSmsat,
+            "deutschlernen": CrawlerDeutschlernen,
+            "witzenet": CrawlerWitzenet,
+            "justli": CrawlerJustli,
         }
 
         # get crawler-class
