@@ -3,8 +3,9 @@ import os
 import datetime;
 import requests
 from pathlib import Path
-from bs4 import BeautifulSoup
-from Crawlers.HelperForCrawler import get_next_index_from_file
+from bs4 import BeautifulSoup, Tag, ResultSet
+
+from Crawlers.HelperForCrawler import get_next_index_from_file, get_full_url
 
 
 class CrawlerBase:
@@ -157,3 +158,57 @@ class CrawlerBase:
         # Nothing found!
         return None
 
+    def possiblelinklist_append(self, list):
+        """Append a given list of a-tags to the self.possiblelinklist
+
+        :param list: list of a Tags to be added to self.possiblelinklist
+        """
+
+        for link in list:
+            if not isinstance(link, Tag):
+                # ignore others than Tags
+                continue
+
+            # get and prepare url
+            href = link.get('href')
+            possiblelink = get_full_url(href, self.currenturl)
+
+            # try to store in list
+            if possiblelink not in self.oldprocessedlinks:
+                self.possiblelinklist.append(possiblelink)
+
+
+    def get_sequence_of_element(self, start_element, element_type):
+        """Starts with a start element and gets all next_elements that are of given element_type
+
+        :param start_element: start element (type Tag)
+        :param element_type: element-name that are required
+        :return: the list of elements
+        """
+
+        # initialisation and check params
+        list = []
+        if start_element is None or element_type is None:
+            return None
+
+        if isinstance(start_element, ResultSet):
+            # start_element is ResultSet, e.g. result of find_all ==> process each element and finish
+            for element in start_element:
+                listPart = self.get_sequence_of_element(element, element_type)
+                list.extend(listPart)
+            return list
+
+        if not isinstance(start_element, Tag):
+            return None
+
+        # append element and next_elements of requested type to list
+        list.append(start_element)
+        for e in start_element.next_elements:
+            if isinstance(e, Tag):
+                if e.name == "a":
+                    list.append(e)
+                else:
+                    # we found something else, stop here
+                    break
+
+        return list

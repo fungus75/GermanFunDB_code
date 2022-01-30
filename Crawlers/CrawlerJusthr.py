@@ -16,7 +16,7 @@ class CrawlerJusthr(CrawlerBase):
     Use param["mainelementclass"] for css-class of main element that sores jokes
     Use param["stopelement"] for element where joke extraction should stop
     Use param["linkelementid"] for element where links are stored
-
+    Use param["linkfallbackclass"] as fallback if no links were found (find all a-elements after the ones with that class
 
     """
 
@@ -29,23 +29,24 @@ class CrawlerJusthr(CrawlerBase):
         if self.oldprocessedlinks is None:
             self.oldprocessedlinks = [self.currenturl]
 
+        links = None
+
         # search links within param["linkelementid"]
         linkbase=self.soupcontent.find(id=self.param.get("linkelementid", "___Undefined____"))
         if linkbase is None:
-            return self.return_possible_link()
+            # search for fallback: all links with given class and all following link-elements
+            fallback = self.soupcontent.find_all("a", {'class': self.param.get("linkfallbackclass", "___Undefined____")})
+            links = self.get_sequence_of_element(fallback, "a")
+            if len(links) == 0:
+                # haven't found fallback links, use possible link
+                return self.return_possible_link()
+        else:
+            links = linkbase.find_all("a")
 
-        links = linkbase.find_all("a")
+        # add to self.possiblelinklist
+        self.possiblelinklist_append(links)
 
-        # search for links currently not processed
-        for link in links:
-            href = link.get('href')
-
-            possiblelink = get_full_url(href, self.currenturl)
-            if possiblelink not in self.oldprocessedlinks:
-                # found link that was not processed before
-                self.possiblelinklist.append(possiblelink)
-
-        # if nothing was found, try self.possiblelinklist
+        # return one good element of possiblelinklist
         return self.return_possible_link()
 
     def load_and_save_jokes(self):
