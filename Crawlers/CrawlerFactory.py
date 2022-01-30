@@ -1,4 +1,5 @@
 from Crawlers.CrawlerDeutschlernen import CrawlerDeutschlernen
+from Crawlers.CrawlerJusthr import CrawlerJusthr
 from Crawlers.CrawlerJustli import CrawlerJustli
 from Crawlers.CrawlerSmsat import CrawlerSmsat
 from Crawlers.CrawlerWitzenet import CrawlerWitzenet
@@ -27,6 +28,7 @@ class CrawlerFactory:
             "deutschlernen": CrawlerDeutschlernen,
             "witzenet": CrawlerWitzenet,
             "justli": CrawlerJustli,
+            "justhr": CrawlerJusthr,
         }
 
         # get crawler-class

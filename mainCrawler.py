@@ -33,9 +33,27 @@ pages = [
 #     {'url': 'http://witze.net/winter-witze', 'type': 'citate', 'crawler': 'witzenet'},
 #     {'url': 'http://witze.net/%c3%b6sterreich-witze', 'type': 'citate', 'crawler': 'witzenet'},
 #     {'url': 'https://karrierebibel.de/witze/', 'type': 'joke', 'crawler': 'justli', 'options': 'liwithoutclass'},
-     {'url': 'https://www.aberwitzig.com/flachwitze.php', 'type': 'joke', 'crawler': 'justhr', 'options': ''},
+#     {'url': 'https://www.aberwitzig.com/flachwitze.php', 'type': 'joke', 'crawler': 'justhr', 'mainelement': 'div',
+#        'mainelementclass': 'haupt', 'stopelement': 'a', 'linkelementid': 'topeinhundert', 'linkfallbackclass': 'rot'},
+    {'url': 'https://www.aberwitzig.com/schwarzer-humor.php', 'type': 'joke', 'crawler': 'justhr', 'mainelement': 'div',
+        'mainelementclass': 'haupt', 'stopelement': 'a', 'linkelementid': 'topeinhundert', 'linkfallbackclass': 'rot'},
+    {'url': 'https://www.aberwitzig.com/coole-lustige-sprueche.php', 'type': 'joke', 'crawler': 'justhr',
+        'mainelement': 'div', 'mainelementclass': 'haupt', 'stopelement': 'a', 'linkelementid': 'topeinhundert',
+        'linkfallbackclass': 'rot'},
+    {'url': 'https://www.aberwitzig.com/scherzfragen.php', 'type': 'joke', 'crawler': 'justhr',
+        'mainelement': 'div', 'mainelementclass': 'haupt', 'stopelement': 'a', 'linkelementid': 'topeinhundert',
+        'linkfallbackclass': 'rot'},
+    {'url': 'https://www.aberwitzig.com/chuck-norris-witze.php', 'type': 'cn', 'crawler': 'justhr',
+        'mainelement': 'div', 'mainelementclass': 'haupt', 'stopelement': 'a', 'linkelementid': 'topeinhundert',
+        'linkfallbackclass': 'rot'},
+    {'url': 'https://www.aberwitzig.com/gute-witze.php', 'type': 'joke', 'crawler': 'justhr',
+        'mainelement': 'div', 'mainelementclass': 'haupt', 'stopelement': 'a', 'linkelementid': 'topeinhundert',
+        'linkfallbackclass': 'rot'},
+    {'url': 'https://www.aberwitzig.com/alle-kinder-witze.php', 'type': 'joke', 'crawler': 'justhr',
+        'mainelement': 'div', 'mainelementclass': 'haupt', 'stopelement': 'a', 'linkelementid': 'topeinhundert',
+        'linkfallbackclass': 'rot'},
 
-         ]
+]
 
 # configure folders (must already exist)
 WORKDIR = "C:/temp/GermanFunDB/Temp"

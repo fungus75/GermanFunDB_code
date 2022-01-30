@@ -41,6 +41,7 @@ class CrawlerBase:
         self.jokeworkfolder = None
         self.currenturl = None
         self.oldprocessedlinks = None
+        self.possiblelinklist = []
 
         # check if we have to serch for author
         self.fetch_author = self.param.get("type", None) == "citate"
@@ -136,4 +137,23 @@ class CrawlerBase:
         """
         raise Exception("Using CrawlerBase directly is not supported")
 
+    def return_possible_link(self):
+        """return a possible link from self.possiblelinklist
+
+        :return: possible link or None if no one was found
+        """
+
+        # as long as there are some links left in list
+        while len(self.possiblelinklist) > 0:
+            # fetch first element from self.possiblelink
+            possiblelink = self.possiblelinklist[0]
+            self.possiblelinklist.remove(possiblelink)
+
+            # try if it is a newly seen link
+            if possiblelink not in self.oldprocessedlinks:
+                self.oldprocessedlinks.append(possiblelink)
+                return possiblelink
+
+        # Nothing found!
+        return None
 
