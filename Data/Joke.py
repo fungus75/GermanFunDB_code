@@ -24,10 +24,10 @@ class Joke:
         :param import_filename: filename to load from
         """
 
-        if joketext == None and import_filename == None:
+        if joketext is None and import_filename is None:
             raise Exception("Please supply eater import_filename or joketext")
 
-        if joketext != None:
+        if joketext is not None:
             # store into object and exit
             self.joketext = joketext
             self.author = author
@@ -35,7 +35,7 @@ class Joke:
             self.likes = likes
             return
 
-        if import_filename != None:
+        if import_filename is not None:
             # load from file
             f = open(import_filename, "r")
             s = f.read()
@@ -51,11 +51,8 @@ class Joke:
             self.likes = data.get('likes', None)
             return
 
-
-
     def to_jsonstring(self):
-        """
-        returns the whole object as json-string
+        """returns the whole object as json-string
 
         :return: json-encoded string of the whole object
         """
@@ -65,10 +62,8 @@ class Joke:
             "postedtime": self.postedtime,
             "likes": self.likes})
 
-
     def save_as_file(self, filename, overwrite=True):
-        """
-        saves the joke to a file
+        """saves the joke to a file
 
         :param filename: filename including path, as string
         :param overwrite: if true, existing file will e overwritten
