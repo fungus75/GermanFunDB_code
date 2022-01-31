@@ -7,8 +7,7 @@ import shutil
 from Crawlers.CrawlerFactory import CrawlerFactory
 
 # configure WebPages and Cawl-Mode
-from Crawlers.HelperForCrawler import convert_workdir_to_json
-
+from Crawlers.HelperForCrawler import convert_workdir_to_json, import_into_workdir
 
 pages = [
 
@@ -59,6 +58,7 @@ pages = [
 # configure folders (must already exist)
 WORKDIR = "C:/temp/GermanFunDB/Temp"
 EXPORTFILE = "C:/temp/GermanFunDB/GermanFunDB.json"
+IMPORTDIR = "C:/temp/GermanFunDB.stage/Temp"
 
 # ============================================
 # Start of ProgramCode, no adjustment required
@@ -67,6 +67,9 @@ EXPORTFILE = "C:/temp/GermanFunDB/GermanFunDB.json"
 # cleanup workdir
 if os.path.exists(WORKDIR):
     shutil.rmtree(WORKDIR)
+
+# import old state of db
+import_into_workdir(IMPORTDIR, WORKDIR)
 
 # start crawling
 for param in pages:

@@ -2,6 +2,8 @@
 Helper-Functions for the crawlers
 """
 import os
+import shutil
+from pathlib import Path
 
 
 def get_next_index_from_file(filename):
@@ -198,3 +200,38 @@ def remove_unnecessary_spaces(text):
         text = text.replace('  ', ' ')
 
     return text.strip()
+
+
+def import_into_workdir(importdir, workdir):
+    """Imports (Merges) another workdir into the current workdir
+
+    :param importdir: the workdir-folder of another jokedb to be imported into given workdir
+    :param workdir: workdir of current fundb
+    """
+
+    if not os.path.exists(importdir) or not os.path.exists(importdir + "/webidx"):
+        # nothing to do, importdir do not exist or is no jokedb
+        return
+
+    if importdir == workdir:
+        # can not import db itself into db
+        return
+
+    # create workdir if not exist
+    path = Path(workdir)
+    path.mkdir(parents=True, exist_ok=True)
+
+    # start importing
+    total_websites = int(get_file_as_string(importdir + "/webidx")) + 1
+
+    # process each webfolder
+    for webidx in range(total_websites):
+        webdir = importdir + "/web_" + str(webidx)
+
+        newidx = get_next_index_from_file(workdir + "/webidx")
+        newwebdir = workdir + "/web_" + str(newidx)
+
+        print("Importing Processing " + webdir + " as " +  newwebdir)
+        shutil.copytree(webdir, newwebdir)
+
+
