@@ -1,7 +1,7 @@
 import time
 
 from Crawlers.CrawlerBase import CrawlerBase
-from Crawlers.HelperForCrawler import remove_unnecessary_spaces
+from Crawlers.HelperForCrawler import remove_unnecessary_spaces, get_author_from_top
 from Data.Joke import Joke
 
 
@@ -59,6 +59,12 @@ class CrawlerWitzeat(CrawlerBase):
         # Extract text
         text = remove_unnecessary_spaces(p.text)
         author = None
+
+        # if we have to fetch author, find within last brackets
+        if self.fetch_author:
+            textauthor = get_author_from_top(text, None, ':')
+            text = textauthor["text"]
+            author = textauthor["author"]
 
         # Save Joke
         joke = Joke(text, author)

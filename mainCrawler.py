@@ -104,6 +104,7 @@ pages = [
     # {'url': 'https://witze.at/kategorie/189/weihnachtssprueche/', 'type': 'joke', 'crawler': 'witzeat' },
     # {'url': 'https://witze.at/kategorie/190/whatsapp-sprueche/', 'type': 'joke', 'crawler': 'witzeat' },
     # {'url': 'https://witze.at/kategorie/154/zungenbrecher/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/73/zitate/', 'type': 'citate', 'crawler': 'witzeat' },
 ]
 
 # configure folders (must already exist)

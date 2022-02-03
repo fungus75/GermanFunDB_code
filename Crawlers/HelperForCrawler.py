@@ -45,9 +45,39 @@ def get_indexed_element_from_string(string, substring, index):
 
     return find_pos
 
+def get_author_from_top(text, begin_author_char, end_author_char):
+    """extracts the author from the beginning of the string if it is sourrounded by begin_author_char and end_author_char
+
+    :param text: the string that should be checked
+    :param begin_author_char: the begin character for author
+    :param end_author_char: (optional): the end character for author. If missing begin_author_char is taken
+    :return: dictionary with "text" and "author" or None on error
+    """
+
+    # check/adjust parameters and set initial-values
+    if text is None:
+        return None
+
+    author = None
+
+    if end_author_char is not None:
+        # try to find delimiter between author and text
+        end_author_pos = text.find(end_author_char)
+        if end_author_pos >= 0:
+            # extract anything before end_author_char as author, rest as text
+            author = remove_unnecessary_spaces(text[:end_author_pos - len(end_author_char) + 1])
+            text = remove_unnecessary_spaces(text[end_author_pos + len(end_author_char):])
+
+            # check if begin_author_char exists and text author starts with begin_author_char
+            if begin_author_char is not None and begin_author_char == author[:len(begin_author_char)]:
+                # yes, remove begin_author_char
+                author = author[len(begin_author_char):]
+
+    return {"text": text, "author": author}
+
 
 def get_author_from_end(text, begin_author_char, end_author_char=None):
-    """etracts the author from the end of a string if it is sourrounded by begin_author_char and end_author_char
+    """extracts the author from the end of a string if it is sourrounded by begin_author_char and end_author_char
 
     :param text: the string that should be checked
     :param begin_author_char: the begin character for author
