@@ -1,5 +1,5 @@
 from Crawlers.CrawlerBase import CrawlerBase
-from Crawlers.HelperForCrawler import save_joke_and_update_index, get_full_url, get_author_from_end
+from Crawlers.HelperForCrawler import get_author_from_end
 from Data.Joke import Joke
 
 
@@ -28,7 +28,7 @@ class CrawlerSmsat(CrawlerBase):
         for link in links:
             if link.text.strip() == "Weiter":
                 next_url = link.get('href')
-        return get_full_url(next_url, self.currenturl)
+        return self.get_full_url(next_url)
 
     def load_and_save_jokes(self):
         """Extract jokes from previously loaded soupcontent
@@ -52,7 +52,7 @@ class CrawlerSmsat(CrawlerBase):
                 author = textauthor["author"]
 
             joke = Joke(text, author)
-            save_joke_and_update_index(joke, self.jokeworkfolder)
+            self.fun_db.save_joke_and_update_index(joke)
 
 
 

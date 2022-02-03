@@ -7,7 +7,7 @@ import shutil
 from Crawlers.CrawlerFactory import CrawlerFactory
 
 # configure WebPages and Cawl-Mode
-from Crawlers.HelperForCrawler import convert_workdir_to_json, import_into_workdir
+from FunDB.FunDB import FunDB
 
 pages = [
 
@@ -86,6 +86,24 @@ pages = [
     # {'url': 'https://witze.at/kategorie/36/weihnachten/', 'type': 'joke', 'crawler': 'witzeat' },
     # {'url': 'https://witze.at/kategorie/76/wilder-westen/', 'type': 'joke', 'crawler': 'witzeat' },
     # {'url': 'https://witze.at/kategorie/71/wusstest-du/', 'type': 'joke', 'crawler': 'witzeat' },
+
+    # {'url': 'https://witze.at/kategorie/128/al-bundy-sprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/129/ausreden/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/157/bauernregeln/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/130/chuck-norris-facts/', 'type': 'cn', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/132/dieter-bohlen-sprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/162/freundschaftssprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/164/gute-nacht-sprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/167/hochzeitssprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/141/klosprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/169/kluge-sprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/171/lebensweisheiten/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/144/reime/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/151/trinksprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/187/vatertag-sprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/189/weihnachtssprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/190/whatsapp-sprueche/', 'type': 'joke', 'crawler': 'witzeat' },
+    # {'url': 'https://witze.at/kategorie/154/zungenbrecher/', 'type': 'joke', 'crawler': 'witzeat' },
 ]
 
 # configure folders (must already exist)
@@ -101,16 +119,17 @@ IMPORTDIR = "C:/temp/GermanFunDB.stage/Temp"
 if os.path.exists(WORKDIR):
     shutil.rmtree(WORKDIR)
 
+fun_db = FunDB(WORKDIR)
+
 # import old state of db
-import_into_workdir(IMPORTDIR, WORKDIR)
+fun_db.import_workdir(IMPORTDIR)
 
 # start crawling
 for param in pages:
-    param["workdir"] = WORKDIR
-    crawler = CrawlerFactory.get_crawler(param)
+    crawler = CrawlerFactory.get_crawler(fun_db, param)
     crawler.start()
 
 # creating output
-convert_workdir_to_json(EXPORTFILE, WORKDIR)
+fun_db.export_json(EXPORTFILE)
 
 

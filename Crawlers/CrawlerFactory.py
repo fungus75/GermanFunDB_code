@@ -12,9 +12,10 @@ class CrawlerFactory:
     """
 
     @staticmethod
-    def get_crawler(param):
+    def get_crawler(fun_db, param):
         """gets (creates) a new crawler class
 
+        :param fun_db: initialilzed fun_db for storing information
         :param param: dictinary with at least the following elements: "url", "type" and "crawler"
         :return: new crawler-instance
         """
@@ -40,5 +41,5 @@ class CrawlerFactory:
             raise Exception("Non-Existing crawler requested: " + param.get("crawler"))
 
         # return newly created crawler-instance
-        return crawler(param)
+        return crawler(fun_db, param)
 

@@ -1,11 +1,11 @@
 import json
 import os
-import datetime;
+import datetime
 import requests
 from pathlib import Path
 from bs4 import BeautifulSoup, Tag, ResultSet
 
-from Crawlers.HelperForCrawler import get_next_index_from_file, get_full_url
+from Crawlers.HelperForCrawler import get_indexed_element_from_string
 
 
 class CrawlerBase:
@@ -18,10 +18,12 @@ class CrawlerBase:
 
     def __init__(
             self,
+            fun_db,
             param
     ):
         """Constructor.
 
+        :param fun_db: initialilzed fun_db for storing information
         :param param: parameters given as dictionary with at least url and type
 
         Possible Type(s):
@@ -31,21 +33,21 @@ class CrawlerBase:
         """
 
         # check if cricical params exist and store them
-        if param is None or param.get("url",None) is None or param.get("type",None) is None:
+        if param is None or param.get("url", None) is None or param.get("type", None) is None:
             raise Exception("Param does not exist or missing params")
 
         self.param = param
 
         # initialize some other attributes
         self.soupcontent = None
-        self.webworkfolder = None
-        self.jokeworkfolder = None
         self.currenturl = None
         self.oldprocessedlinks = None
         self.possiblelinklist = []
 
         # check if we have to serch for author
         self.fetch_author = self.param.get("type", None) == "citate"
+        self.fun_db = fun_db
+
 
     def start(self, url=None):
         """start crawling incl. preparation
@@ -56,21 +58,16 @@ class CrawlerBase:
         if url is None:
             url = self.param.get("url", None)
 
-        # prepare workfolder for current task
-        path = Path(self.param.get("workdir"))
-        path.mkdir(parents=True, exist_ok=True)
-        next_web_index = get_next_index_from_file(self.param.get("workdir") + "/webidx")
-        self.webworkfolder = self.param.get("workdir") + "/web_" + str(next_web_index)
-        os.mkdir(self.webworkfolder)
+        # prepare funDB and switch workdir
+        next_web_index = self.fun_db.get_next_index_from_file("/webidx")
+        self.fun_db.switch_jokedir("/web_" + str(next_web_index))
 
         # write information of web
         information = {
             "param": self.param,
             "timestamp": str(datetime.datetime.now())
         }
-        infofile = open(self.webworkfolder + "/info", "w")
-        infofile.write(json.dumps(information))
-        infofile.close()
+        self.fun_db.write_info(information)
 
         print("Start working on " + url)
 
@@ -88,13 +85,6 @@ class CrawlerBase:
         # stop if no content could be loaded
         if self.get_pagecontent(url) is None:
             return None
-
-        # prepare workdir
-        workdir = self.webworkfolder + "/jokes"
-        if not os.path.exists(workdir):
-            os.mkdir(workdir)
-        self.jokeworkfolder = workdir
-
 
         # find and extract jokes
         self.load_and_save_jokes()
@@ -171,7 +161,7 @@ class CrawlerBase:
 
             # get and prepare url
             href = link.get('href')
-            possiblelink = get_full_url(href, self.currenturl)
+            possiblelink = self.get_full_url(href)
 
             # try to store in list
             if possiblelink not in self.oldprocessedlinks:
@@ -212,3 +202,32 @@ class CrawlerBase:
                     break
 
         return list
+
+    def get_full_url(self, urlpart):
+        """gets a working url from a possible url-part compaired to self.currenturl
+
+        :param urlpart: the (possible) part of an url
+        """
+
+        if urlpart is None:
+            return urlpart
+
+        # if url starts with http or https, all is good
+        if urlpart[:5] == "http:" or urlpart[:6] == "https:":
+            return urlpart
+
+        # if url starts with / we have to extract servername
+        # since url is always in format http://servername/ or https://servername/,
+        # we have to find 3rd slash
+        if urlpart[0] == "/":
+            end_of_servername = get_indexed_element_from_string(self.currenturl, "/", 3)
+            if end_of_servername == -1:
+                return None
+            return self.currenturl[:end_of_servername] + urlpart
+
+        # last try: concat urlpart at the end of url_base but split filename from urlbase in advance
+        lastslash = self.currenturl.rfind("/")
+        url_base_without_file = self.currenturl
+        if lastslash >= 0:
+            url_base_without_file = self.currenturl[:lastslash]
+        return url_base_without_file + "/" + urlpart

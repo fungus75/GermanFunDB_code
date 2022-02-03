@@ -1,8 +1,7 @@
 import time
 
 from Crawlers.CrawlerBase import CrawlerBase
-from Crawlers.HelperForCrawler import save_joke_and_update_index, get_full_url, get_author_from_end, \
-    remove_unnecessary_spaces
+from Crawlers.HelperForCrawler import remove_unnecessary_spaces
 from Data.Joke import Joke
 
 
@@ -40,7 +39,7 @@ class CrawlerWitzeat(CrawlerBase):
 
         time.sleep(3)  # Sleep for 3 seconds to not flood webpage
 
-        return get_full_url(next_url, self.currenturl)
+        return self.get_full_url(next_url)
 
     def load_and_save_jokes(self):
         """Extract jokes from previously loaded soupcontent
@@ -63,7 +62,7 @@ class CrawlerWitzeat(CrawlerBase):
 
         # Save Joke
         joke = Joke(text, author)
-        save_joke_and_update_index(joke, self.jokeworkfolder)
+        self.fun_db.save_joke_and_update_index(joke)
 
 
 

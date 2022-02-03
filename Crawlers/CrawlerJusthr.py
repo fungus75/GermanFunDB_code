@@ -1,8 +1,7 @@
 from bs4 import Tag
 
 from Crawlers.CrawlerBase import CrawlerBase
-from Crawlers.HelperForCrawler import save_joke_and_update_index, get_full_url, get_author_from_end, \
-    remove_unnecessary_spaces
+from Crawlers.HelperForCrawler import get_author_from_end, remove_unnecessary_spaces
 from Data.Joke import Joke
 
 
@@ -105,7 +104,7 @@ class CrawlerJusthr(CrawlerBase):
                     author = textauthor["author"]
 
                 joke = Joke(text, author)
-                save_joke_and_update_index(joke, self.jokeworkfolder)
+                self.fun_db.save_joke_and_update_index(joke)
 
 
 
