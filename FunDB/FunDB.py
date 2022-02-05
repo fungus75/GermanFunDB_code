@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import csv
 from pathlib import Path
 
 from Crawlers.HelperForCrawler import get_file_as_string
@@ -87,7 +88,7 @@ class FunDB():
         joke.save_as_file(self.fulljokesdir + "/joke_" + str(next_index))
 
     def export_json(self, export_file):
-        """converts the given workdir into a export-file in json-format
+        """converts the whole database into an export-file in json-format
 
         :param export_file the json-file where all data should be saved
         :param workdir the workdir from generation step
@@ -104,7 +105,7 @@ class FunDB():
         # process each webfolder
         for webidx in range(total_websites):
             webdir = self.basedir + "/web_" + str(webidx)
-            print("Processing " + webdir)
+            print("JSON-Processing " + webdir)
 
             if webidx > 0:
                 jsonfile.write(',\n')
@@ -129,6 +130,63 @@ class FunDB():
         jsonfile.write(']')
         jsonfile.close()
         print("Overall joke amount: " + str(overall_jokes_amount))
+
+    def export_csv(self, source_filename, data_filename):
+        """exports the whole database into 2 export files: one with all the source-infos (links, queried at,...)
+           and one with the data itself
+
+        :param source_filename: full path for the source-info-file
+        :param data_filename: full path for the data-file
+        """
+
+        # open both files and write header
+        srcfile = open(source_filename, "w")
+        srcwriter = csv.writer(srcfile, dialect="unix")
+        srcwriter.writerow(["id", "url", "type", "crawler", "timestamp"])
+
+        datafile = open(data_filename, "w")
+        datawriter = csv.writer(datafile, dialect="unix")
+        datawriter.writerow(["id", "src", "joketext", "author", "postedtime", "likes"])
+
+        overall_jokes_idx = 0
+
+        # check total number of websites and process each webfolder
+        total_websites = int(get_file_as_string(self.basedir + "/webidx")) + 1
+        for webidx in range(total_websites):
+            webdir = self.basedir + "/web_" + str(webidx)
+            print("CSV-Processing " + webdir)
+
+            # read src ("info")
+            src = json.loads(get_file_as_string(webdir + "/info"))
+
+            # reformat to csv and write into csv-file
+            # srcwriter.writerow(["id", "url", "type", "crawler", "timestamp"])
+            param = src.get("param")
+            srcrow = [webidx, param.get("url"),
+                      param.get("type"),
+                      param.get("crawler"),
+                      src.get("timestamp")]
+            srcwriter.writerow(srcrow)
+
+            # load jokes
+            total_jokes = int(get_file_as_string(webdir + '/jokes/jokeidx')) + 1
+            print("  overall_jokes_idx: " + str(overall_jokes_idx))
+            for jokeidx in range(total_jokes):
+                joke = json.loads(get_file_as_string(webdir + '/jokes/joke_' + str(jokeidx)))
+
+                # reformat to csv and write into csv-file
+                # datawriter.writerow(["id", "src", "joketext", "author", "postedtime", "likes"])
+                overall_jokes_idx += 1
+                datarow = [overall_jokes_idx, webidx,
+                           joke.get("joketext"),
+                           joke.get("author"),
+                           joke.get("postedtime"),
+                           joke.get("likes")]
+                datawriter.writerow(datarow)
+
+        # close files and finish
+        srcfile.close()
+        datafile.close()
 
     def import_workdir(self, importdir):
         """Imports (Merges) another workdir into the current workdir

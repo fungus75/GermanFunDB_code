@@ -109,7 +109,9 @@ pages = [
 
 # configure folders (must already exist)
 WORKDIR = "C:/temp/GermanFunDB/Temp"
-EXPORTFILE = "C:/temp/GermanFunDB/GermanFunDB.json"
+EXPORTJSON = "C:/temp/GermanFunDB/GermanFunDB.json"
+EXPORTCSVSOURCES = "C:/temp/GermanFunDB/GermanFunDB-Sources.csv"
+EXPORTCSVDATA = "C:/temp/GermanFunDB/GermanFunDB-Data.csv"
 IMPORTDIR = "C:/temp/GermanFunDB.stage/Temp"
 
 # ============================================
@@ -131,6 +133,7 @@ for param in pages:
     crawler.start()
 
 # creating output
-fun_db.export_json(EXPORTFILE)
+fun_db.export_json(EXPORTJSON)
+fun_db.export_csv(EXPORTCSVSOURCES, EXPORTCSVDATA)
 
 
