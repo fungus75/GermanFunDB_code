@@ -144,7 +144,7 @@ class FunDB():
         srcwriter = csv.writer(srcfile, dialect="unix")
         srcwriter.writerow(["id", "url", "type", "crawler", "timestamp"])
 
-        datafile = open(data_filename, "w")
+        datafile = open(data_filename, "w", encoding='utf-8')
         datawriter = csv.writer(datafile, dialect="unix")
         datawriter.writerow(["id", "src", "joketext", "author", "postedtime", "likes"])
 
