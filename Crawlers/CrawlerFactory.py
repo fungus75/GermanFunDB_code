@@ -4,6 +4,7 @@ from Crawlers.CrawlerJustli import CrawlerJustli
 from Crawlers.CrawlerSmsat import CrawlerSmsat
 from Crawlers.CrawlerWitzeat import CrawlerWitzeat
 from Crawlers.CrawlerWitzenet import CrawlerWitzenet
+from Crawlers.CrawlerTranslateFUNDataset import CrawlerTranslateFUNDataset
 
 
 class CrawlerFactory:
@@ -32,6 +33,7 @@ class CrawlerFactory:
             "justli": CrawlerJustli,
             "justhr": CrawlerJusthr,
             "witzeat": CrawlerWitzeat,
+            "translate_fundataset": CrawlerTranslateFUNDataset,
 
         }
 
