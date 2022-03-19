@@ -1,6 +1,8 @@
 import json
 import time
 
+import requests
+
 from Crawlers.CrawlerBase import CrawlerBase
 from Crawlers.GoogleTranslate.simpleGoogleTranslate import simpleGoogleTranslate
 from Crawlers.HelperForCrawler import get_author_from_end, remove_unnecessary_spaces
@@ -32,8 +34,15 @@ class CrawlerTranslateFUNDataset(CrawlerBase):
         if srclang is None:
             raise Exception("Parameter srclang not set")
 
+
+        # get directly from url
+        page = requests.get(self.currenturl)
+        if page.status_code != 200:
+            return Exception("Can not get content from url " + self.currenturl)
+
+
         # find div where jokes start
-        data = json.loads(self.soupcontent.contents[0])
+        data = json.loads(page.content)
         for oneJoke in data:
 
             # Joke is key, good/not good is value (!= 1 means not good)
