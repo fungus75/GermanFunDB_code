@@ -1,4 +1,5 @@
 import json
+import time
 
 from Crawlers.CrawlerBase import CrawlerBase
 from Crawlers.GoogleTranslate.simpleGoogleTranslate import simpleGoogleTranslate
@@ -35,10 +36,13 @@ class CrawlerTranslateFUNDataset(CrawlerBase):
         data = json.loads(self.soupcontent.contents[0])
         for oneJoke in data:
 
-            # Joke is key, good/not good is value (!= 1 means not good
+            # Joke is key, good/not good is value (!= 1 means not good)
             good = data[oneJoke]
-            if good != 0:
+            if good != 1:
                 continue
+
+            # wait 3 seconds to not over-use api
+            time.sleep(3)
 
             # translate text from srclang to german
             text = simpleGoogleTranslate(oneJoke, srclang, "de")
