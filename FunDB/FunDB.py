@@ -142,7 +142,7 @@ class FunDB():
         # open both files and write header
         srcfile = open(source_filename, "w")
         srcwriter = csv.writer(srcfile, dialect="unix")
-        srcwriter.writerow(["id", "url", "type", "crawler", "timestamp"])
+        srcwriter.writerow(["id", "url", "type", "crawler", "timestamp", "amount"])
 
         datafile = open(data_filename, "w", encoding='utf-8')
         datawriter = csv.writer(datafile, dialect="unix")
@@ -159,17 +159,20 @@ class FunDB():
             # read src ("info")
             src = json.loads(get_file_as_string(webdir + "/info"))
 
+            # total jokes in that source-folder
+            total_jokes = int(get_file_as_string(webdir + '/jokes/jokeidx')) + 1
+
             # reformat to csv and write into csv-file
             # srcwriter.writerow(["id", "url", "type", "crawler", "timestamp"])
             param = src.get("param")
             srcrow = [webidx, param.get("url"),
                       param.get("type"),
                       param.get("crawler"),
-                      src.get("timestamp")]
+                      src.get("timestamp"),
+                      total_jokes]
             srcwriter.writerow(srcrow)
 
             # load jokes
-            total_jokes = int(get_file_as_string(webdir + '/jokes/jokeidx')) + 1
             print("  overall_jokes_idx: " + str(overall_jokes_idx))
             for jokeidx in range(total_jokes):
                 joke = json.loads(get_file_as_string(webdir + '/jokes/joke_' + str(jokeidx)))

@@ -1,7 +1,7 @@
 import json
 import time
-
 import requests
+import gzip
 
 from Crawlers.CrawlerBase import CrawlerBase
 from Crawlers.Translators.simpleGoogleTranslate import simpleGoogleTranslate
@@ -9,7 +9,7 @@ from Crawlers.HelperForCrawler import get_author_from_end, remove_unnecessary_sp
 from Data.Joke import Joke
 
 
-class CrawlerTranslateFUNDataset(CrawlerBase):
+class CrawlerTranslaterJokesData(CrawlerBase):
     """Crawler for deutsch-lernen.com
 
     """
@@ -41,25 +41,30 @@ class CrawlerTranslateFUNDataset(CrawlerBase):
             return Exception("Can not get content from url " + self.currenturl)
 
 
-        # find div where jokes start
-        data = json.loads(page.content)
+        # unzip data
+        content = gzip.decompress(page.content).decode('utf-8')
+
+        # split by newline
+        data = content.split("\n")
+
+        # parse one by one
         for oneJoke in data:
 
-            # Joke is key, good/not good is value (!= 1 means not good)
-            good = data[oneJoke]
-            if good != 1:
-                continue
+            # each line has that format: humor-level \t joke
+            # humor-level can be seen as number of likes, because the more the better.
+            joke_parts = oneJoke.split("\t")
+
 
             # wait 3 seconds to not over-use api
             time.sleep(3)
 
             # translate text from srclang to german
-            text = simpleGoogleTranslate(oneJoke, srclang, "de")
+            text = simpleGoogleTranslate(joke_parts[1], srclang, "de")
             text = remove_unnecessary_spaces(text)
             print(text)
             author = None
 
-            joke = Joke(text, author)
+            joke = Joke(text, author, likes=joke_parts[0])
             self.fun_db.save_joke_and_update_index(joke)
 
 

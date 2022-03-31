@@ -5,6 +5,7 @@ from Crawlers.CrawlerSmsat import CrawlerSmsat
 from Crawlers.CrawlerWitzeat import CrawlerWitzeat
 from Crawlers.CrawlerWitzenet import CrawlerWitzenet
 from Crawlers.CrawlerTranslateFUNDataset import CrawlerTranslateFUNDataset
+from Crawlers.CrawlerTranslaterJokesData import CrawlerTranslaterJokesData
 
 
 class CrawlerFactory:
@@ -34,6 +35,7 @@ class CrawlerFactory:
             "justhr": CrawlerJusthr,
             "witzeat": CrawlerWitzeat,
             "translate_fundataset": CrawlerTranslateFUNDataset,
+            "translate_rjokesdata": CrawlerTranslaterJokesData,
 
         }
 
