@@ -4,6 +4,7 @@ import time
 import requests
 
 from Crawlers.CrawlerBase import CrawlerBase
+from Crawlers.Translators.simpleDeepLTranslate import simpleDeepLTranslate
 from Crawlers.Translators.simpleGoogleTranslate import simpleGoogleTranslate
 from Crawlers.HelperForCrawler import get_author_from_end, remove_unnecessary_spaces
 from Data.Joke import Joke
@@ -34,6 +35,8 @@ class CrawlerTranslateFUNDataset(CrawlerBase):
         if srclang is None:
             raise Exception("Parameter srclang not set")
 
+        translator = self.param.get("translator", "google")
+
 
         # get directly from url
         page = requests.get(self.currenturl)
@@ -54,12 +57,16 @@ class CrawlerTranslateFUNDataset(CrawlerBase):
             time.sleep(3)
 
             # translate text from srclang to german
-            text = simpleGoogleTranslate(oneJoke, srclang, "de")
+            text = oneJoke
+            if translator == "google":
+                text = simpleGoogleTranslate(oneJoke, srclang, "de")
+            if translator == "deepl":
+                text = simpleDeepLTranslate(oneJoke, srclang, "de")
             text = remove_unnecessary_spaces(text)
             print(text)
             author = None
 
-            joke = Joke(text, author)
+            joke = Joke(text, author, comment=oneJoke)
             self.fun_db.save_joke_and_update_index(joke)
 
 

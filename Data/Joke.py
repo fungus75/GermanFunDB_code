@@ -14,6 +14,7 @@ class Joke:
             postedtime=None,
             likes=None,
             import_filename=None,
+            comment=None,
     ):
         """Constructor.
 
@@ -33,6 +34,7 @@ class Joke:
             self.author = author
             self.postedtime = postedtime
             self.likes = likes
+            self.comment = comment
             return
 
         if import_filename is not None:
@@ -49,6 +51,7 @@ class Joke:
             self.author = data.get('author', None)
             self.postedtime = data.get('postedtime', None)
             self.likes = data.get('likes', None)
+            self.comment = data.get('comment', None)
             return
 
     def to_jsonstring(self):
@@ -60,7 +63,9 @@ class Joke:
             "joketext": self.joketext,
             "author": self.author,
             "postedtime": self.postedtime,
-            "likes": self.likes})
+            "likes": self.likes,
+            "comment": self.comment
+        })
 
     def save_as_file(self, filename, overwrite=True):
         """saves the joke to a file

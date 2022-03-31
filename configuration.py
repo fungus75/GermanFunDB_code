@@ -99,7 +99,7 @@ pages = [
     # {'url': 'https://witze.at/kategorie/190/whatsapp-sprueche/', 'type': 'joke', 'crawler': 'witzeat' },
     # {'url': 'https://witze.at/kategorie/154/zungenbrecher/', 'type': 'joke', 'crawler': 'witzeat' },
     # {'url': 'https://witze.at/kategorie/73/zitate/', 'type': 'citate', 'crawler': 'witzeat' },
-    # {'url': 'https://raw.githubusercontent.com/computational-humor/humor-recognition/master/data/FUN-dataset/assessed.json', 'type': 'joke', 'crawler': 'translate_fundataset', 'srclang': 'ru'},
+    # {'url': 'https://raw.githubusercontent.com/computational-humor/humor-recognition/master/data/FUN-dataset/assessed.json', 'type': 'joke', 'crawler': 'translate_fundataset', 'srclang': 'ru', 'translator': 'deepl'},
     # {'url': 'https://raw.githubusercontent.com/computational-humor/humor-recognition/master/data/FUN-dataset/test.json', 'type': 'joke', 'crawler': 'translate_fundataset', 'srclang': 'ru'},
     # {'url': 'https://github.com/orionw/rJokesData/raw/master/data/test.tsv.gz', 'type': 'joke', 'crawler': 'translate_rjokesdata', 'srclang': 'en'},
 ]
