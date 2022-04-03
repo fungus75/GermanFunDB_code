@@ -6,6 +6,7 @@ from Crawlers.CrawlerWitzeat import CrawlerWitzeat
 from Crawlers.CrawlerWitzenet import CrawlerWitzenet
 from Crawlers.CrawlerTranslateFUNDataset import CrawlerTranslateFUNDataset
 from Crawlers.CrawlerTranslaterJokesData import CrawlerTranslaterJokesData
+from Crawlers.FileImporter.csvImport import CrawlerCSVImport
 
 
 class CrawlerFactory:
@@ -36,6 +37,7 @@ class CrawlerFactory:
             "witzeat": CrawlerWitzeat,
             "translate_fundataset": CrawlerTranslateFUNDataset,
             "translate_rjokesdata": CrawlerTranslaterJokesData,
+            "csvimport": CrawlerCSVImport,
 
         }
 
