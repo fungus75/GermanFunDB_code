@@ -126,3 +126,5 @@ EXPORTCSVSOURCES = "C:/temp/GermanFunDB/GermanFunDB-Sources.csv"
 # Export CSV-File 2: List of Jokes
 EXPORTCSVDATA = "C:/temp/GermanFunDB/GermanFunDB-Data.csv"
 
+# TXT File Export
+EXPORTTXT = "C:/temp/GermanFunDB/GermanFunDB-OnlyJokes.txt"

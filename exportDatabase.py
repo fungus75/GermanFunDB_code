@@ -13,6 +13,6 @@ fun_db = FunDB(cfg.WORKDIR)
 # creating output
 fun_db.export_json(cfg.EXPORTJSON)
 fun_db.export_csv(cfg.EXPORTCSVSOURCES, cfg.EXPORTCSVDATA)
-
+fun_db.export_txt(cfg.EXPORTTXT)
 
 

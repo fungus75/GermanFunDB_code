@@ -1,10 +1,11 @@
+import codecs
 import json
 import os
 import shutil
 import csv
 from pathlib import Path
 
-from Crawlers.HelperForCrawler import get_file_as_string
+from Crawlers.HelperForCrawler import get_file_as_string, remove_unnecessary_spaces
 
 
 class FunDB():
@@ -190,6 +191,47 @@ class FunDB():
         # close files and finish
         srcfile.close()
         datafile.close()
+
+    def export_txt(self, filename):
+        """exports the whole database into one export file with only the jokes in it
+
+        :param filename: full path for the text-file
+        """
+
+        # open both files and write header
+        txtfile = codecs.open(filename, "w", "utf-8")
+
+        overall_jokes_idx = 0
+
+        # check total number of websites and process each webfolder
+        total_websites = int(get_file_as_string(self.basedir + "/webidx")) + 1
+        for webidx in range(total_websites):
+            webdir = self.basedir + "/web_" + str(webidx)
+            print("TXT-Processing " + webdir)
+
+            # read src ("info")
+            src = json.loads(get_file_as_string(webdir + "/info"))
+
+            # total jokes in that source-folder
+            total_jokes = int(get_file_as_string(webdir + '/jokes/jokeidx')) + 1
+
+            # load jokes
+            print("  overall_jokes_idx: " + str(overall_jokes_idx))
+            for jokeidx in range(total_jokes):
+                joke = json.loads(get_file_as_string(webdir + '/jokes/joke_' + str(jokeidx)))
+
+                # reformat to txt and write into txt-file
+                overall_jokes_idx += 1
+                text = joke.get("joketext")
+
+                # cleanup text
+                text = remove_unnecessary_spaces(text)
+
+                txtfile.write(text)
+                txtfile.write("\n")
+
+        # close files and finish
+        txtfile.close()
 
     def import_workdir(self, importdir):
         """Imports (Merges) another workdir into the current workdir
