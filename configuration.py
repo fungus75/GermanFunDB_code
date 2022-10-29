@@ -102,8 +102,9 @@ pages = [
     # {'url': 'https://raw.githubusercontent.com/computational-humor/humor-recognition/master/data/FUN-dataset/assessed.json', 'type': 'joke', 'crawler': 'translate_fundataset', 'srclang': 'ru', 'translator': 'deepl'},
     # {'url': 'https://raw.githubusercontent.com/computational-humor/humor-recognition/master/data/FUN-dataset/test.json', 'type': 'joke', 'crawler': 'translate_fundataset', 'srclang': 'ru'},
     # {'url': 'https://github.com/orionw/rJokesData/raw/master/data/test.tsv.gz', 'type': 'joke', 'crawler': 'translate_rjokesdata', 'srclang': 'en'},
-    {'url': 'C:/temp/GermanFunDB/schlechtewitzefront.csv', 'type': 'joke', 'crawler': 'csvimport', 'jokefield': 'witz',
-     'header': 'True', 'delimiter': ',', 'quotechar':'"', 'converthtmlentities': 'True'}
+    #{'url': 'C:/temp/GermanFunDB/schlechtewitzefront.csv', 'type': 'joke', 'crawler': 'csvimport', 'jokefield': 'witz',
+    # 'header': 'True', 'delimiter': ',', 'quotechar':'"', 'converthtmlentities': 'True'}
+    {'url':'https://www.zitate.eu/topic/', 'type':'citate', 'crawler': 'zitateeu'}
 ]
 
 

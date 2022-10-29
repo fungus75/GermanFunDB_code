@@ -74,7 +74,7 @@ class CrawlerBase:
         # start crawling
         self.crawl(url)
 
-    def crawl(self, url):
+    def crawl(self, url, recurse = True):
         """do the crawl, necessary preparations-steps have to be done before
 
         :param url: the web-url where to crawl from
@@ -89,11 +89,15 @@ class CrawlerBase:
         # find and extract jokes
         self.load_and_save_jokes()
 
+        if not recurse:
+            return
+
         # search for follow-up url
         next_url = self.find_followinglink()
-        if next_url is not None:
+        while next_url:
             print("  Continue on: " + next_url)
-            self.crawl(next_url)
+            self.crawl(next_url, recurse=False)
+            next_url = self.find_followinglink()
 
     def get_pagecontent(self, url):
         """returns the content of a page directly and stores it in self.soupcontent
